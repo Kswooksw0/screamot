@@ -10,20 +10,20 @@ import marmotClose from "../../assets/images/screaming_marmot_close.png";
 import marmotOpen from "../../assets/images/screaming_marmot_open.png";
 import screamSound from "../../assets/media/screamot_scream.mp4";
 
+// ✅ Use a global `Audio()` object to prevent overlapping screams
+let screamAudio = new Audio(screamSound);
+screamAudio.volume = 1.0; // Ensure full volume
+
 const HomePage = () => {
   const [isMouthOpen, setMouthOpen] = useState(false);
   const [counter, setCounter] = useState(0);
   const [shouldJiggle, setShouldJiggle] = useState(false);
-  const audioRef = useRef(null);
   const timeoutRef = useRef(null);
   const navigate = useNavigate();
 
   const contractAddress = "CA: 7GCihgDB8fe6KNjn2MYtkzZcRJQy3t9GHdC8uHYmW2hr";
 
-  // ✅ Fix: Remove unused globalCounter variable
-  useEffect(() => {}, []);
-
-  // Jiggle animation logic
+  // ✅ Jiggle animation logic
   useEffect(() => {
     let timer;
     if (shouldJiggle) {
@@ -44,54 +44,14 @@ const HomePage = () => {
     };
   }, [shouldJiggle]);
 
-  // Handle the click action and audio
-  //   const handleClick = async () => {
-  //     if (audioRef.current) {
-  //       audioRef.current.pause();
-  //       audioRef.current.currentTime = 0;
-  //       audioRef.current.play().catch((error) => {
-  //         console.error("Playback failed:", error);
-  //       });
-  //     }
-
-  //     if (!isMouthOpen) {
-  //       setCounter((prevCounter) => prevCounter + 1);
-  //       setShouldJiggle(true);
-  //       setMouthOpen(true);
-  //     }
-
-  //     timeoutRef.current = setTimeout(() => {
-  //       setMouthOpen(false);
-  //     }, 250);
-  //   };
-  // Handle the click action and audio
-
-  //   const handleClick = async () => {
-  //     if (audioRef.current) {
-  //       try {
-  //         audioRef.current.pause(); // Stop current playback
-  //         audioRef.current.currentTime = 0; // Reset to beginning
-  //         audioRef.current.load(); // Ensures mobile browsers reset the audio buffer
-  //         await audioRef.current.play(); // Start playing
-
-  //         setCounter((prevCounter) => prevCounter + 1);
-  //         setShouldJiggle(true);
-  //         setMouthOpen(true);
-
-  //         timeoutRef.current = setTimeout(() => {
-  //           setMouthOpen(false);
-  //         }, 250);
-  //       } catch (error) {
-  //         console.error("Playback failed:", error);
-  //       }
-  //     }
-  //   };
-
-  // Handle the click action and audio (NEW METHOD)
+  // ✅ Smooth audio playback with NO OVERLAPS
   const handleClick = () => {
-    const audio = new Audio(screamSound); // Create new audio instance
-    audio.volume = 1.0; // Set volume to maximum
-    audio.play().catch((error) => console.error("Playback error:", error)); // Play instantly
+    // Stop previous scream, reset & play fresh sound
+    screamAudio.pause();
+    screamAudio.currentTime = 0;
+    screamAudio
+      .play()
+      .catch((error) => console.error("Playback error:", error));
 
     // Update UI state
     setCounter((prevCounter) => prevCounter + 1);
@@ -103,6 +63,7 @@ const HomePage = () => {
     }, 250);
   };
 
+  // ✅ Cleanup timeout on unmount
   useEffect(() => {
     return () => {
       if (timeoutRef.current) {
@@ -111,15 +72,13 @@ const HomePage = () => {
     };
   }, []);
 
-  // ✅ Fix: Memoized navigate function to avoid ESLint warning
+  // ✅ Memoized navigate function to avoid ESLint warning
   const navigateToAboutPage = () => {
     navigate("/about-scream");
   };
 
   return (
     <div className={styles.container} onClick={handleClick}>
-      <audio ref={audioRef} src={screamSound} preload="auto" playsInline />
-
       <div className={styles.imageContainer}>
         <img
           src={isMouthOpen ? marmotOpen : marmotClose}
