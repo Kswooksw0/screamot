@@ -1,0 +1,46 @@
+.tokenomicsContainer {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    /* border: red solid 5px;   */
+}
+
+.tokenomicsContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* border: red solid 5px; */
+    gap: 10px; /* Adds space between each text item */
+}
+
+
+.title {
+    display: flex;    
+    justify-content: center;
+    align-items: center;
+    font-family: 'AntonSC';
+    font-size: 2rem;
+    margin-bottom: 15px; /* Adds space below "Tokenomics" */
+}
+
+
+/*  MEDIA QUERIES for larger screens */
+
+/* Small devices (smartphones) ----------- */
+/* Styles for smartphones (CSS viewport width < 768px) */
+@media (max-width: 767px) {
+}
+
+/* Medium devices (tablets and small laptops) ----------- */
+/* Styles for tablets and small laptops (CSS viewport width 768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+}
+/* Large devices (laptops and desktops) ----------- */
+/* Styles for laptops and desktops (CSS viewport width 1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+}
+/* Extra large devices (large desktops) ----------- */
+/* Styles for large desktops (CSS viewport width > 1440px) */
+@media (min-width: 1441px) {
+}

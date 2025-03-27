@@ -1,0 +1,194 @@
+/* MARMOT CONTAINER */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-sizing: border-box;
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
+    /* cursor: pointer; */
+  }
+  
+  /* MARMOT IMAGE */
+  
+  .imageContainer {
+    width: 100%;
+    height: 100%;
+  }
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    pointer-events: none;
+    /* border: green solid 5px; */
+  }
+  
+  /* MAIN COINTAINER FOR LOGO, TITLE, ADDRESS, ICONS */
+  .mainContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    position: absolute;
+    top: 2%;
+    /* border: green solid 5px; */
+  }
+  
+  /* TOP HALF FOR THE LOGO, TITLE */
+  .topHalf {
+    display: flex;
+    /* flex-direction: row; */
+    justify-content: center;
+    /* border: orange solid 5px; */
+  }
+  
+  /* BOTTOM HALF FOR THE ADDRESS, ICONS */
+  .bottomHalf {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    /* border: red solid 5px; */
+  }
+  
+  .infoBoxContainer {
+    display: flex;
+    justify-content: space-between;
+    /* justify-content: center; */
+    align-items: center;
+    width: 80%;
+    /* padding: 0 2rem; */
+    gap: 1.5rem;
+    /* border: pink solid 5px; */
+  }
+  
+  /* COUNTER CONTAINER */
+  .counterContainer {
+    position: absolute;
+    top: 55%; /* Adjust as needed to center on the belly */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: purple solid 5px; */
+  }
+  
+  /* Counter number styling */
+  .count {
+    font-family: "LuckiestGuy", sans-serif;
+    color: var(--primary-color, white);
+    font-size: clamp(6rem, 10vw, 8rem);
+    text-shadow: 0px var(--text-thickness, 7px) 0px var(--shadow-color, black);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3em;
+    /* border: red solid 5px; */
+  }
+  
+  .count.jiggle {
+    will-change: transform;
+    animation: jiggle 0.5s ease-out;
+  }
+  
+  /* Jiggle animation */
+  @keyframes jiggle {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+      transform: translateX(-5px);
+    }
+    20%,
+    40%,
+    60%,
+    80% {
+      transform: translateX(5px);
+    }
+  }
+  
+  
+  /* Global Counter container styling */
+  .globalCounterContainer {
+    position: absolute;
+    bottom: 2%; /* Position the container at the bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.6); /* White translucent background */
+    padding: 1em 1em;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for better visibility */
+    text-align: center;
+    z-index: 10; /* Ensures the global counter stays on top */
+  }
+  
+  /* Global Counter text styling */
+  .globalCount {
+    font-family: "LuckiestGuy", sans-serif;
+    font-size: 2rem;
+    color: black; /* Text in black */
+    font-weight: bold;
+  }
+  
+  
+  /*  MEDIA QUERIES for larger screens */
+  
+  /* Small devices (smartphones) ----------- */
+  /* Styles for smartphones (CSS viewport width < 768px) */
+  @media (max-width: 767px) {}
+  
+  /* Medium devices (tablets and small laptops) ----------- */
+  /* Styles for tablets and small laptops (CSS viewport width 768px - 1023px) */
+  @media (min-width: 768px) and (max-width: 1023px) {
+    .mainContent {
+      top: 5%;
+    }
+    .bottomHalf {
+      width: 80%;
+    }
+    .infoBoxContainer {
+      width: 75%;
+    }
+  }
+  
+  /* Large devices (laptops and desktops) ----------- */
+  /* Styles for laptops and desktops (CSS viewport width 1024px - 1440px) */
+  @media (min-width: 1024px) and (max-width: 1440px) {
+    .mainContent {
+      /* need to change to some other value when in TV mode(1024 x 720) as the marmot's face is covered.  */
+      top: 1.5%;
+      width: 70%;
+    }
+    .bottomHalf {
+      width: 80%;
+    }
+    .infoBoxContainer {
+      width: 100%;
+    }
+  }
+  
+  /* Extra large devices (large desktops) ----------- */
+  /* Styles for large desktops (CSS viewport width > 1440px) */
+  @media (min-width: 1441px) {
+    .mainContent {
+      /* need to change to some other value when in TV mode(1024 x 720) as the marmot's face is covered.  */
+      top: 1.5%;
+      width: 70%;
+    }
+    .bottomHalf {
+      width: 80%;
+    }
+    .infoBoxContainer {
+      justify-content: center;
+      gap: 2rem;
+    }
+  }
+  

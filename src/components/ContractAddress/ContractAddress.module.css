@@ -1,0 +1,57 @@
+/* CONTRACT ADDRESS CONTAINER */
+.contractAddressContainer {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 2rem;
+  padding: 0.13em 0.9em;
+  border: 2px solid #ccc;
+  flex-grow: 1;
+  max-width: 65%;
+  overflow: hidden;
+  border: var(--shadow-color) solid 0.25rem;
+}
+
+.solscanLogo {
+  width: 36px;
+  height: 36px;
+  margin-right: 0.5rem;
+  padding: 0.1em 0;
+}
+
+.contractAddress {
+  color: black;
+  font-size: 0.8rem;
+  font-family: "Roboto";
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/*  MEDIA QUERIES for larger screens */
+
+/* Small devices (smartphones) ----------- */
+/* Styles for smartphones (CSS viewport width < 768px) */
+@media (max-width: 767px) {}
+
+/* Medium devices (tablets and small laptops) ----------- */
+/* Styles for tablets and small laptops (CSS viewport width 768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {}
+/* Large devices (laptops and desktops) ----------- */
+/* Styles for laptops and desktops (CSS viewport width 1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .contractAddress {
+    font-size: 0.9rem;
+  }
+  .contractAddressContainer {
+    max-width: 45%;
+  }
+}
+/* Extra large devices (large desktops) ----------- */
+/* Styles for large desktops (CSS viewport width > 1440px) */
+@media (min-width: 1441px) {
+  .contractAddressContainer {
+    max-width: 35%;
+  }
+}

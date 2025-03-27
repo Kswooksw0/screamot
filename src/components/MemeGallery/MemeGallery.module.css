@@ -1,0 +1,76 @@
+/* .memeGalleryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 2rem;
+}
+
+.videoWrapper {
+  width: 100%;
+  max-width: 560px;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.05);
+} */
+
+.title {
+  display: flex;
+  justify-content: center;
+  font-family: "AntonSC";
+  font-size: 3rem;
+}
+
+iframe {
+  border: none;
+  width: 100%;
+}
+
+/* .memeGalleryContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.2rem;
+    padding: 2rem;
+    border: red solid 5px;
+    font-family: 'AntonSC';
+} */
+
+.memeGalleryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.2rem;
+  padding: 1.5rem;
+  font-family: "AntonSC";
+  opacity: 0;
+  transform: translateY(1rem); /* Start 50px lower */
+  transition: opacity 1s ease-out, transform 1s ease-out;
+  /* border: red solid 5px; */
+}
+
+/* This class will be added when the element is in the viewport */
+.memeGalleryContainer.visible {
+  opacity: 1;
+  transform: translateY(0); /* Moves the container into its natural position */
+}
+
+.videoWrapper {
+  width: 100%;
+  max-width: 560px;
+  border-radius: 1rem;
+  /* border: green solid 5px; */
+}

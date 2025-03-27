@@ -1,0 +1,66 @@
+/* ICONS CONTAINER */
+.iconsContainer {
+  display: flex;
+  gap: 2rem;
+  /* margin: 0 1rem; */
+  justify-content: center;
+  /* border: green solid 5px; */
+}
+
+/* Icon styling */
+.icon {
+  width: 40px;
+  /* margin: 0 1rem; */
+  transition: transform 0.2s ease-in-out;
+  /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); */
+}
+
+.icon:hover {
+  transform: scale(1.3);
+  /* box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); */
+}
+
+/* About Button */
+.aboutButton {
+  background-color: rgba(255, 255, 255, 0.6); /* Translucent background */
+  color: black;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-family: "LuckiestGuy", sans-serif;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.aboutButton:hover {
+  transform: scale(1.1);
+}
+
+/*  MEDIA QUERIES for larger screens */
+
+/* Small devices (smartphones) ----------- */
+/* Styles for smartphones (CSS viewport width < 768px) */
+@media (max-width: 767px) {
+  .aboutButton {
+    display: none;
+  }
+}
+
+/* Medium devices (tablets and small laptops) ----------- */
+/* Styles for tablets and small laptops (CSS viewport width 768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {}
+/* Large devices (laptops and desktops) ----------- */
+/* Styles for laptops and desktops (CSS viewport width 1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  .contractAddress {
+    font-size: 0.9rem;
+  }
+  .icon {
+    width: 50px;
+  }
+}
+/* Extra large devices (large desktops) ----------- */
+/* Styles for large desktops (CSS viewport width > 1440px) */
+@media (min-width: 1441px) {}

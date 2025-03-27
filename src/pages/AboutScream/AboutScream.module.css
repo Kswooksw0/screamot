@@ -1,0 +1,79 @@
+body {
+    overflow: scroll;
+}
+
+.aboutScreamContainer {
+    overflow: hidden;
+    background-color: orange;
+  }
+
+
+.descContainer {
+  display: flex;
+  justify-content: center;
+  margin: 2em 0;
+  transform: translateX(-100%); /* Move off-screen to the left */
+  /* border: blue solid 5px; */
+}
+.desc {
+    width: 80%;
+    line-height: 1.6rem;
+    text-align: center;
+    font-family: 'ArchivoBlack';
+    font-weight:bolder;
+  /* border: red solid 5px; */
+}
+
+.tokenomics {
+    transform: translateX(100%); /* Move off-screen to the right */
+    /* border: brown solid 5px; */
+    margin: 2em 0;
+  }
+
+/* Description and Tokenomics Container Initial State */
+.descContainer,
+.tokenomics {
+  opacity: 0; /* Start with hidden */
+  transition: opacity 1s ease-out, transform 1s ease-out; /* Animate opacity and position */
+}
+
+/* Add Active Class for Animation */
+.slide-in-left {
+  opacity: 1;
+  transform: translateX(0); /* Slide into view from the left */
+}
+
+.slide-in-right {
+  opacity: 1;
+  transform: translateX(0); /* Slide into view from the right */
+}
+
+/*  MEDIA QUERIES for larger screens */
+
+/* Small devices (smartphones) ----------- */
+/* Styles for smartphones (CSS viewport width < 768px) */
+@media (max-width: 767px) {
+}
+
+/* Medium devices (tablets and small laptops) ----------- */
+/* Styles for tablets and small laptops (CSS viewport width 768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .desc {
+        width: 70%;
+    }
+}
+/* Large devices (laptops and desktops) ----------- */
+/* Styles for laptops and desktops (CSS viewport width 1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1440px) {
+    .desc {
+        width: 50%;
+    }
+}
+/* Extra large devices (large desktops) ----------- */
+/* Styles for large desktops (CSS viewport width > 1440px) */
+@media (min-width: 1441px) {
+    .desc {
+        width: 50%;
+        line-height:2.2rem;
+    }
+}

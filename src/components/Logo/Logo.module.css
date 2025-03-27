@@ -1,0 +1,41 @@
+.logoContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: red solid 5px; */
+}
+
+.logo {
+  width: 15vw; /* Adjust logo size dynamically based on viewport width */
+  max-width: 140px; /* Set a maximum width to prevent it from becoming too large */
+  transition: opacity 0.2s ease; /* Smooth transition for opacity */
+  cursor: pointer;
+  /* border: red solid 5px; */
+}
+
+/* Hover effect */
+.logo:hover {
+  opacity: 0.6; /* Reduce opacity to 60% when hovered */
+}
+
+/*  MEDIA QUERIES for larger screens */
+
+/* Small devices (smartphones) ----------- */
+/* Styles for smartphones (CSS viewport width < 768px) */
+@media (max-width: 767px) {}
+
+/* Medium devices (tablets and small laptops) ----------- */
+/* Styles for tablets and small laptops (CSS viewport width 768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .logo {
+    width: 13vw;
+  }
+}
+
+/* Large devices (laptops and desktops) ----------- */
+/* Styles for laptops and desktops (CSS viewport width 1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1440px) {}
+
+/* Extra large devices (large desktops) ----------- */
+/* Styles for large desktops (CSS viewport width > 1440px) */
+@media (min-width: 1441px) {}
