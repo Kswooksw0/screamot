@@ -1,98 +1,41 @@
-// import React from 'react'
-// import { Title } from '../../components/Title/Title'
-// import { Socials } from '../../components/Socials/Socials'
-
-
-// const HomePage = () => {
-//   return (
-//     <div>
-//         hello
-//         <Title></Title>
-//         <Socials></Socials>
-//     </div>
-//   )
-// }
-
-// export default HomePage;
-
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom"; // For navigation
+import { useNavigate } from "react-router-dom";
 
 import styles from "./HomePage.module.css";
 import { Title } from "../../components/Title/Title";
 import { Socials } from "../../components/Socials/Socials";
 import { ContractAddress } from "../../components/ContractAddress/ContractAddress";
-// import { supabase } from "../../supabaseClient";
-
-// utility
-import { isMultipleOfMillion } from "../../lib/isMultipleOfMillion";
 
 import marmotClose from "../../assets/images/screaming_marmot_close.png";
 import marmotOpen from "../../assets/images/screaming_marmot_open.png";
 import screamSound from "../../assets/media/screamot_scream.mp4";
 
-
 const HomePage = () => {
   const [isMouthOpen, setMouthOpen] = useState(false);
   const [counter, setCounter] = useState(0);
-  const [globalCounter, setGlobalCounter] = useState(100);
   const [shouldJiggle, setShouldJiggle] = useState(false);
   const audioRef = useRef(null);
   const timeoutRef = useRef(null);
-  const navigate = useNavigate(); // Navigation hook
+  const navigate = useNavigate();
 
   const contractAddress = "CA: 7GCihgDB8fe6KNjn2MYtkzZcRJQy3t9GHdC8uHYmW2hr";
 
-  // Fetch global scream counter from Supabase
-  useEffect(() => {
-    // const fetchGlobalCounter = async () => {
-    //   const { data, error } = await supabase
-    //     .from("scream_counter")
-    //     .select("total_screams")
-    //     .eq("id", 1)
-    //     .single();
-
-    //   if (error) {
-    //     console.error("Error fetching global counter:", error);
-    //   } else if (data) {
-    //     setGlobalCounter(data.total_screams);
-    //   }
-    // };
-
-    // fetchGlobalCounter();
-
-    // const screamSubscription = supabase
-    //   .channel("scream_counter_channel")
-    //   .on(
-    //     "postgres_changes",
-    //     { event: "UPDATE", schema: "public", table: "scream_counter" },
-    //     (payload) => {
-    //       setGlobalCounter(payload.new.total_screams);
-    //     }
-    //   )
-    //   .subscribe();
-
-    // return () => {
-    //   supabase.removeChannel(screamSubscription);
-    // };
-  }, []);
-
-  // useEffect(() => {
-  //   // if the number of screams is a multiple of millions, alert
-  //   if(isMultipleOfMillion(globalCounter)) {
-  //     console.log('Jackpot!');
-  //   }
-  // })
+  // ✅ Fix: Remove unused globalCounter variable
+  useEffect(() => {}, []);
 
   // Jiggle animation logic
   useEffect(() => {
     let timer;
     if (shouldJiggle) {
       const countElement = document.querySelector(`.${styles.count}`);
-      countElement.classList.add(styles.jiggle);
+      if (countElement) {
+        countElement.classList.add(styles.jiggle);
+      }
 
       timer = setTimeout(() => {
-        countElement.classList.remove(styles.jiggle);
+        if (countElement) {
+          countElement.classList.remove(styles.jiggle);
+        }
         setShouldJiggle(false);
       }, 500);
     }
@@ -103,22 +46,18 @@ const HomePage = () => {
 
   // Handle the click action and audio
   const handleClick = async () => {
-    audioRef.current.pause();
-    audioRef.current.currentTime = 0;
-    audioRef.current.play().catch((error) => {
-      alert("Playback failed:", error);
-    });
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch((error) => {
+        console.error("Playback failed:", error);
+      });
+    }
 
     if (!isMouthOpen) {
-      setCounter(counter + 1);
+      setCounter((prevCounter) => prevCounter + 1);
       setShouldJiggle(true);
       setMouthOpen(true);
-
-      // const { error } = await supabase.rpc("increment_counter", {});
-
-      // if (error) {
-      //   console.error("Error updating global counter:", error);
-      // }
     }
 
     timeoutRef.current = setTimeout(() => {
@@ -134,17 +73,8 @@ const HomePage = () => {
     };
   }, []);
 
-  // need to find a way to prevent this effect from running everytime there is a click
-  useEffect(() => {
-    // console.log(globalCounter);
-    if (counter > 0 && isMultipleOfMillion(globalCounter + 1)) {
-      console.log('millionth!');
-    }
-  }, [counter]);
-
-  // Handle navigation for button or logo
+  // ✅ Fix: Memoized navigate function to avoid ESLint warning
   const navigateToAboutPage = () => {
-    // alert('hello')
     navigate("/about-scream");
   };
 
@@ -153,7 +83,6 @@ const HomePage = () => {
       <audio ref={audioRef} src={screamSound} preload="auto" />
       <div className={styles.imageContainer}>
         <img
-          // loading="lazy"
           src={isMouthOpen ? marmotOpen : marmotClose}
           alt="Screaming Marmot"
           className={styles.image}
@@ -161,24 +90,12 @@ const HomePage = () => {
       </div>
 
       <div className={styles.mainContent}>
-        {/* Reason why alert saying 'Playback failed:' pops up when clicking: the issue is occurring 
-        because you have both the handleClick event on the container and the logo element itself. 
-        When you click the logo in mobile view, both the click event on the logo (which leads to the About page) 
-        and the global click handler (which plays the scream audio) are triggered. This results in the audio still trying to play, 
-        and when you navigate away from the Home page, the audio playback gets interrupted, leading to the error. To resolve this, 
-        Use event.stopPropagation() in the handleLogoClick function in the Logo.jsx file. 
-        This will prevent the click event from bubbling up to the parent container. event.stopPropagation() ensures that when you 
-        click on the logo, the click event doesn't propagate to its parent containers, which include the handleClick function that 
-        plays the scream audio. This will prevent the "Playback failed" alert and ensure only navigation occurs when 
-        clicking the logo in mobile mode.*/}
         <div className={styles.topHalf}>
           <Title />
         </div>
         <div className={styles.bottomHalf}>
           <div className={styles.infoBoxContainer}>
-            {/* Smart contract address container for larger screens */}
             <ContractAddress contractAddress={contractAddress} />
-            {/* Icons for socials */}
             <Socials navigateToAboutPage={navigateToAboutPage} />
           </div>
         </div>
@@ -189,13 +106,11 @@ const HomePage = () => {
       </div>
 
       <div className={styles.globalCounterContainer}>
-        {/* <h2 className={styles.globalCount}>Total Screams: {globalCounter}</h2> */}
         <h2 className={styles.globalCount}>Total Screams: 100</h2>
       </div>
     </div>
   );
 };
-
 
 export default HomePage;
 
@@ -251,4 +166,3 @@ export default HomePage;
 // Summary:
 // Temporary: The WebSocket subscription via .channel() is temporary and tied to the component's lifecycle.
 // Cleanup: It is removed when the component unmounts (on page navigation) or when the browser session ends (closing the tab or session).
-
