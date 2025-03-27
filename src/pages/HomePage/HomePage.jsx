@@ -45,24 +45,45 @@ const HomePage = () => {
   }, [shouldJiggle]);
 
   // Handle the click action and audio
+  //   const handleClick = async () => {
+  //     if (audioRef.current) {
+  //       audioRef.current.pause();
+  //       audioRef.current.currentTime = 0;
+  //       audioRef.current.play().catch((error) => {
+  //         console.error("Playback failed:", error);
+  //       });
+  //     }
+
+  //     if (!isMouthOpen) {
+  //       setCounter((prevCounter) => prevCounter + 1);
+  //       setShouldJiggle(true);
+  //       setMouthOpen(true);
+  //     }
+
+  //     timeoutRef.current = setTimeout(() => {
+  //       setMouthOpen(false);
+  //     }, 250);
+  //   };
+  // Handle the click action and audio
   const handleClick = async () => {
     if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-      audioRef.current.play().catch((error) => {
+      try {
+        audioRef.current.pause(); // Stop current playback
+        audioRef.current.currentTime = 0; // Reset to beginning
+        audioRef.current.load(); // Ensures mobile browsers reset the audio buffer
+        await audioRef.current.play(); // Start playing
+
+        setCounter((prevCounter) => prevCounter + 1);
+        setShouldJiggle(true);
+        setMouthOpen(true);
+
+        timeoutRef.current = setTimeout(() => {
+          setMouthOpen(false);
+        }, 250);
+      } catch (error) {
         console.error("Playback failed:", error);
-      });
+      }
     }
-
-    if (!isMouthOpen) {
-      setCounter((prevCounter) => prevCounter + 1);
-      setShouldJiggle(true);
-      setMouthOpen(true);
-    }
-
-    timeoutRef.current = setTimeout(() => {
-      setMouthOpen(false);
-    }, 250);
   };
 
   useEffect(() => {
@@ -80,7 +101,8 @@ const HomePage = () => {
 
   return (
     <div className={styles.container} onClick={handleClick}>
-      <audio ref={audioRef} src={screamSound} preload="auto" />
+      <audio ref={audioRef} src={screamSound} preload="auto" playsInline />
+
       <div className={styles.imageContainer}>
         <img
           src={isMouthOpen ? marmotOpen : marmotClose}
