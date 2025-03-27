@@ -65,25 +65,42 @@ const HomePage = () => {
   //     }, 250);
   //   };
   // Handle the click action and audio
-  const handleClick = async () => {
-    if (audioRef.current) {
-      try {
-        audioRef.current.pause(); // Stop current playback
-        audioRef.current.currentTime = 0; // Reset to beginning
-        audioRef.current.load(); // Ensures mobile browsers reset the audio buffer
-        await audioRef.current.play(); // Start playing
 
-        setCounter((prevCounter) => prevCounter + 1);
-        setShouldJiggle(true);
-        setMouthOpen(true);
+  //   const handleClick = async () => {
+  //     if (audioRef.current) {
+  //       try {
+  //         audioRef.current.pause(); // Stop current playback
+  //         audioRef.current.currentTime = 0; // Reset to beginning
+  //         audioRef.current.load(); // Ensures mobile browsers reset the audio buffer
+  //         await audioRef.current.play(); // Start playing
 
-        timeoutRef.current = setTimeout(() => {
-          setMouthOpen(false);
-        }, 250);
-      } catch (error) {
-        console.error("Playback failed:", error);
-      }
-    }
+  //         setCounter((prevCounter) => prevCounter + 1);
+  //         setShouldJiggle(true);
+  //         setMouthOpen(true);
+
+  //         timeoutRef.current = setTimeout(() => {
+  //           setMouthOpen(false);
+  //         }, 250);
+  //       } catch (error) {
+  //         console.error("Playback failed:", error);
+  //       }
+  //     }
+  //   };
+
+  // Handle the click action and audio (NEW METHOD)
+  const handleClick = () => {
+    const audio = new Audio(screamSound); // Create new audio instance
+    audio.volume = 1.0; // Set volume to maximum
+    audio.play().catch((error) => console.error("Playback error:", error)); // Play instantly
+
+    // Update UI state
+    setCounter((prevCounter) => prevCounter + 1);
+    setShouldJiggle(true);
+    setMouthOpen(true);
+
+    timeoutRef.current = setTimeout(() => {
+      setMouthOpen(false);
+    }, 250);
   };
 
   useEffect(() => {
