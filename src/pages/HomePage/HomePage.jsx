@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { supabase } from "../../supabaseClient"; // Import Supabase client
 import styles from "./HomePage.module.css";
 import { Title } from "../../components/Title/Title";
 import { Socials } from "../../components/Socials/Socials";
@@ -10,54 +10,83 @@ import marmotClose from "../../assets/images/screaming_marmot_close.png";
 import marmotOpen from "../../assets/images/screaming_marmot_open.png";
 import screamSound from "../../assets/media/screamot_scream.mp4";
 
-// ✅ Use a global `Audio()` object to prevent overlapping screams
+// ✅ Global Audio Object to prevent overlapping sounds
 let screamAudio = new Audio(screamSound);
-screamAudio.volume = 1.0; // Ensure full volume
+screamAudio.volume = 1.0;
 
 const HomePage = () => {
   const [isMouthOpen, setMouthOpen] = useState(false);
-  const [counter, setCounter] = useState(0);
-  const [shouldJiggle, setShouldJiggle] = useState(false);
+  const [counter, setCounter] = useState(0); // Local counter
+  const [globalCounter, setGlobalCounter] = useState(0); // Global counter from Supabase
   const timeoutRef = useRef(null);
   const navigate = useNavigate();
-
   const contractAddress = "CA: 7GCihgDB8fe6KNjn2MYtkzZcRJQy3t9GHdC8uHYmW2hr";
 
-  // ✅ Jiggle animation logic
+  // ✅ Fetch initial total screams from Supabase on page load
   useEffect(() => {
-    let timer;
-    if (shouldJiggle) {
-      const countElement = document.querySelector(`.${styles.count}`);
-      if (countElement) {
-        countElement.classList.add(styles.jiggle);
+    const fetchScreams = async () => {
+      console.log("Fetching scream count from Supabase...");
+
+      const { data, error } = await supabase
+        .from("scream_counter")
+        .select("total_screams")
+        .eq("id", 1)
+        .maybeSingle(); // Prevents the error when no rows exist
+
+      if (error) {
+        console.error("❌ Error fetching scream count:", error);
+      } else if (!data) {
+        console.warn(
+          "⚠️ No data returned from Supabase! Creating initial row..."
+        );
+        await supabase
+          .from("scream_counter")
+          .insert([{ id: 1, total_screams: 0 }], { upsert: true });
+      } else {
+        console.log("✅ Fetched scream count:", data.total_screams);
+        setGlobalCounter(data.total_screams);
       }
-
-      timer = setTimeout(() => {
-        if (countElement) {
-          countElement.classList.remove(styles.jiggle);
-        }
-        setShouldJiggle(false);
-      }, 500);
-    }
-    return () => {
-      clearTimeout(timer);
     };
-  }, [shouldJiggle]);
 
-  // ✅ Smooth audio playback with NO OVERLAPS
-  const handleClick = () => {
-    // Stop previous scream, reset & play fresh sound
+    fetchScreams();
+
+    // ✅ Subscribe to real-time scream count updates via WebSockets
+    const subscription = supabase
+      .channel("scream_counter_channel")
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "scream_counter" },
+        (payload) => {
+          setGlobalCounter(payload.new.total_screams);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(subscription);
+    };
+  }, []);
+
+  // ✅ Handle Click - Increment local and global scream counter
+  const handleClick = async () => {
+    // ✅ Play scream sound
     screamAudio.pause();
     screamAudio.currentTime = 0;
     screamAudio
       .play()
       .catch((error) => console.error("Playback error:", error));
 
-    // Update UI state
+    // ✅ Increment local counter
     setCounter((prevCounter) => prevCounter + 1);
-    setShouldJiggle(true);
-    setMouthOpen(true);
 
+    // ✅ Call Supabase RPC function to update global scream count
+    const { error } = await supabase.rpc("increment_scream_counter");
+
+    if (error) {
+      console.error("Error updating global scream count:", error);
+    }
+
+    setMouthOpen(true);
     timeoutRef.current = setTimeout(() => {
       setMouthOpen(false);
     }, 250);
@@ -72,7 +101,7 @@ const HomePage = () => {
     };
   }, []);
 
-  // ✅ Memoized navigate function to avoid ESLint warning
+  // ✅ Navigate to About Page
   const navigateToAboutPage = () => {
     navigate("/about-scream");
   };
@@ -99,12 +128,14 @@ const HomePage = () => {
         </div>
       </div>
 
+      {/* ✅ Local Click Count */}
       <div className={styles.counterContainer}>
         <h1 className={styles.count}>{counter}</h1>
       </div>
 
+      {/* ✅ Global Scream Count (Live) */}
       <div className={styles.globalCounterContainer}>
-        <h2 className={styles.globalCount}>Total Screams: 100</h2>
+        <h2 className={styles.globalCount}>Total Screams: {globalCounter}</h2>
       </div>
     </div>
   );
