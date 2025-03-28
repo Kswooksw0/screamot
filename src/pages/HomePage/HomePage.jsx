@@ -22,6 +22,10 @@ const HomePage = () => {
   const navigate = useNavigate();
   const contractAddress = "CA: 7GCihgDB8fe6KNjn2MYtkzZcRJQy3t9GHdC8uHYmW2hr";
 
+  useEffect(() => {
+    screamAudio.load(); // Preload scream sound for instant playback
+  }, []);
+
   // ✅ Fetch initial total screams from Supabase on page load
   useEffect(() => {
     const fetchScreams = async () => {
@@ -68,28 +72,53 @@ const HomePage = () => {
   }, []);
 
   // ✅ Handle Click - Increment local and global scream counter
+  //   const handleClick = async () => {
+  //     // ✅ Play scream sound
+  //     screamAudio.pause();
+  //     screamAudio.currentTime = 0;
+  //     screamAudio
+  //       .play()
+  //       .catch((error) => console.error("Playback error:", error));
+
+  //     // ✅ Increment local counter
+  //     setCounter((prevCounter) => prevCounter + 1);
+
+  //     // ✅ Call Supabase RPC function to update global scream count
+  //     const { error } = await supabase.rpc("increment_scream_counter");
+
+  //     if (error) {
+  //       console.error("Error updating global scream count:", error);
+  //     }
+
+  //     setMouthOpen(true);
+  //     timeoutRef.current = setTimeout(() => {
+  //       setMouthOpen(false);
+  //     }, 250);
+  //   };
   const handleClick = async () => {
-    // ✅ Play scream sound
+    // ✅ Instantly update UI (Image & Counter)
+    setCounter((prevCounter) => prevCounter + 1);
+    setMouthOpen(true);
+
+    // ✅ Play scream sound in the background without waiting
     screamAudio.pause();
     screamAudio.currentTime = 0;
     screamAudio
       .play()
       .catch((error) => console.error("Playback error:", error));
 
-    // ✅ Increment local counter
-    setCounter((prevCounter) => prevCounter + 1);
+    // ✅ Close mouth after short delay (non-blocking)
+    timeoutRef.current = setTimeout(() => {
+      setMouthOpen(false);
+    }, 250);
 
+    // ✅ Perform database update **without delaying UI updates**
     // ✅ Call Supabase RPC function to update global scream count
     const { error } = await supabase.rpc("increment_scream_counter");
 
     if (error) {
       console.error("Error updating global scream count:", error);
     }
-
-    setMouthOpen(true);
-    timeoutRef.current = setTimeout(() => {
-      setMouthOpen(false);
-    }, 250);
   };
 
   // ✅ Cleanup timeout on unmount
