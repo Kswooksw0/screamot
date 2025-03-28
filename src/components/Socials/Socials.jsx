@@ -47,7 +47,8 @@ export const Socials = () => {
   const buttonLabel = isAboutPage ? "Back to Homepage" : "About $Scream";
 
   // Handle button click
-  const handleButtonClick = () => {
+  const handleButtonClick = (event) => {
+    event.stopPropagation();
     if (isAboutPage) {
       navigate("/"); // Navigate back to home
     } else {
