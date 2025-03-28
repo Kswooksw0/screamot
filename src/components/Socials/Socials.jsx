@@ -44,7 +44,7 @@ export const Socials = () => {
   const isAboutPage = location.pathname === "/about-scream";
 
   // Set button text based on current page
-  const buttonLabel = isAboutPage ? "Back to Homepage" : "About $Scream";
+  const buttonLabel = isAboutPage ? "Back to Homepage" : "About $Screamot";
 
   // Handle button click
   const handleButtonClick = (event) => {
